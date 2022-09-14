@@ -24,20 +24,29 @@
 
     <GridLayout rows="auto,*,*,*,*,*,*" columns="*,*,*,*,*,*,*">
       <Label
-        class="text-center"
+        class="text-center week"
         width="100%"
         *ngFor="let weekDay of weekDays; let i = index"
         [text]="weekDay"
-        row="0"
+        [row]="0"
         [col]="i"
       ></Label>
+      <FlexboxLayout
+        class="day"
+        *ngFor="let day of days; let i = index"
+        [row]="getRow(i, day)"
+        [col]="day.dayInWeek"
+        (tap)="onChangeStatus()"
+      >
+        <Label [text]="day.dayInMonth"></Label>
+      </FlexboxLayout>
     </GridLayout>
 
-    <Button
+    <!--  <Button
       marginTop="50"
       text="Change Status"
       class="btn"
       (tap)="onChangeStatus()"
-    ></Button>
+    ></Button> -->
   </FlexboxLayout>
 </ScrollView>
