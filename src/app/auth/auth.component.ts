@@ -43,9 +43,14 @@ export class AuthComponent implements OnInit {
     this.form.reset();
     this.emailControlIsValid = true;
     this.passwordControlIsValid = true;
+    this.router.navigate(["/challenges"]);
   }
 
   onSwitch() {
     this.isLogin = !this.isLogin;
+  }
+
+  onChallenges() {
+    this.router.navigate(["/challenges"]);
   }
 }

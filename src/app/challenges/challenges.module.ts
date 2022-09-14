@@ -27,7 +27,6 @@ import { TodayComponent } from "./today/today.component";
     CurrentChallengeComponent,
     TodayComponent,
   ],
-  providers: [],
   schemas: [NO_ERRORS_SCHEMA],
 })
 export class ChallengesModule {}
