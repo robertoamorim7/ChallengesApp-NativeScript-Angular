@@ -10,6 +10,7 @@ import { ChallengeActionsModule } from "./challenges/challenge-actions/challenge
 import { AppComponent } from "./app.component";
 import { AuthComponent } from "./auth/auth.component";
 import { DayModalComponent } from "./challenges/day-modal/day-modal.component";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   bootstrap: [AppComponent],
@@ -17,6 +18,7 @@ import { DayModalComponent } from "./challenges/day-modal/day-modal.component";
     NativeScriptModule,
     NativeScriptFormsModule,
     AppRoutingModule,
+    ReactiveFormsModule,
     NativeScriptUISideDrawerModule,
     SharedModule,
     ChallengeActionsModule,

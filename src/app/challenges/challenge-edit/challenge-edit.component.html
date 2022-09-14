@@ -5,12 +5,47 @@
 <FlexboxLayout class="form">
   <Label text="Página de edição"></Label>
   <StackLayout class="input-field">
-    <Label class="label" text="Title"></Label>
-    <TextField class="input"></TextField>
+    <Label
+      class="label"
+      text="Title"
+      [ngClass]="{ invalid: !titleCtrl.valid && titleCtrl.touched }"
+    ></Label>
+    <TextField
+      class="input"
+      returnKeyType="next"
+      required
+      ngModel
+      #titleCtrl="ngModel"
+    ></TextField>
+    <Label
+      text="Enter a valid title"
+      *ngIf="!titleCtrl.valid && titleCtrl.touched"
+      [ngClass]="{ invalid: !titleCtrl.valid && titleCtrl.touched }"
+    ></Label>
   </StackLayout>
   <StackLayout class="input-field">
-    <Label class="label" text="Description"></Label>
-    <TextField class="input"></TextField>
+    <Label
+      class="label"
+      text="Description"
+      [ngClass]="{ invalid: !descriptionCtrl.valid && descriptionCtrl.touched }"
+    ></Label>
+    <TextView
+      class="input"
+      required
+      returnKeyType="done"
+      ngModel
+      #descriptionCtrl="ngModel"
+    ></TextView>
+    <Label
+      text="Enter a valid description"
+      *ngIf="!descriptionCtrl.valid && descriptionCtrl.touched"
+      [ngClass]="{ invalid: !titleCtrl.valid && titleCtrl.touched }"
+    ></Label>
   </StackLayout>
-  <Button text="Save" class="btn"></Button>
+  <Button
+    text="Save"
+    class="btn"
+    (tap)="onSubmit(titleCtrl.value, descriptionCtrl.value)"
+    [isEnabled]="titleCtrl.valid && descriptionCtrl.valid"
+  ></Button>
 </FlexboxLayout>
