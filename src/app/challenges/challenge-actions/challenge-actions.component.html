@@ -9,5 +9,9 @@
     class="btn btn-fail"
     (tap)="onAction('failed')"
   ></Button>
-  <Button text="Reset" class="btn btn-flat" (tap)="onAction('cancel')"></Button>
+  <Button
+    [text]="cancelText"
+    class="btn btn-flat"
+    (tap)="onAction('cancel')"
+  ></Button>
 </FlexboxLayout>

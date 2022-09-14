@@ -9,5 +9,7 @@
   <Button text="Fail" class="btn" (tap)="onHandleInput('Failed')"></Button>
 </FlexboxLayout> -->
 <FlexboxLayout>
-  <ns-challenge-actions></ns-challenge-actions>
+  <ns-challenge-actions
+    (actionSelect)="onHandleInput($event)"
+  ></ns-challenge-actions>
 </FlexboxLayout>

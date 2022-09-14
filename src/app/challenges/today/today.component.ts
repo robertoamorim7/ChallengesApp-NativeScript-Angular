@@ -10,4 +10,8 @@ export class TodayComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
+
+  onActionSelect(action: string) {
+    console.log(action);
+  }
 }
