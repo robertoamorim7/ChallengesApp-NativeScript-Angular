@@ -9,7 +9,10 @@
   <Button text="Fail" class="btn" (tap)="onHandleInput('Failed')"></Button>
 </FlexboxLayout> -->
 <FlexboxLayout>
+  <Label class="h1" [text]="loadedDate | date"></Label>
+
   <ns-challenge-actions
     (actionSelect)="onHandleInput($event)"
+    [chosen]="loadedStatus"
   ></ns-challenge-actions>
 </FlexboxLayout>

@@ -1,7 +1,10 @@
-import { UIService } from "./../../shared/ui/ui.service";
-import { Component, OnInit, ViewContainerRef } from "@angular/core";
+import { Subscription } from "rxjs";
+import { Component, OnDestroy, OnInit, ViewContainerRef } from "@angular/core";
 import { ModalDialogService } from "@nativescript/angular";
+import { ChallengeService } from "./../challenge.service";
+import { UIService } from "./../../shared/ui/ui.service";
 import { DayModalComponent } from "./../day-modal/day-modal.component";
+import { Challenge, Day, DayStatus } from "../challenge.model";
 
 @Component({
   selector: "ns-current-challenge",
@@ -11,57 +14,65 @@ import { DayModalComponent } from "./../day-modal/day-modal.component";
     "./current-challenge.component.scss",
   ],
 })
-export class CurrentChallengeComponent implements OnInit {
+export class CurrentChallengeComponent implements OnInit, OnDestroy {
   weekDays = ["S", "M", "T", "W", "T", "F", "S"];
-  days: { dayInMonth: number; dayInWeek: number }[] = [];
-  private currentMonth: number;
-  private currentYear: number;
+  currentChallenge: Challenge;
+  private curChallengeSub: Subscription;
 
   constructor(
     private modalDialog: ModalDialogService,
     private vcRef: ViewContainerRef,
-    private uiService: UIService
+    private uiService: UIService,
+    private challengeService: ChallengeService
   ) {}
 
   ngOnInit(): void {
-    this.currentYear = new Date().getFullYear();
-    this.currentMonth = new Date().getMonth();
-    const daysInMonth = new Date(
-      this.currentYear,
-      this.currentMonth + 1,
-      0
-    ).getDate();
-
-    for (let i = 1; i < daysInMonth + 1; i++) {
-      const date = new Date(this.currentYear, this.currentMonth, i);
-      const dayInWeek = date.getDay();
-      this.days.push({ dayInMonth: i, dayInWeek: dayInWeek });
-    }
+    this.curChallengeSub = this.challengeService.currentChallenge.subscribe(
+      (challenge) => {
+        this.currentChallenge = challenge;
+      }
+    );
   }
 
   getRow(index: number, day: { dayInMonth: number; dayInWeek: number }) {
     const startRow = 1;
     const weekRow = Math.floor(index / 7);
     const firstWeekDayOfMonth = new Date(
-      this.currentYear,
-      this.currentMonth,
+      new Date().getFullYear(),
+      new Date().getMonth(),
       1
     ).getDay();
     const irregularRow = day.dayInWeek < firstWeekDayOfMonth ? 1 : 0;
     return startRow + weekRow + irregularRow;
   }
 
-  onChangeStatus() {
+  onChangeStatus(day: Day) {
+    if (!this.getIsSettable(day.dayInMonth)) {
+      return;
+    }
     this.modalDialog
       .showModal(DayModalComponent, {
         fullscreen: true,
         viewContainerRef: this.uiService.getRootVCRef()
           ? this.uiService.getRootVCRef()
           : this.vcRef,
-        context: { date: new Date() }, //passando dados para o modal (qualquer tipo de dado)
+        context: { date: day.date, status: day.status }, //passando dados para o modal (qualquer tipo de dado)
       })
-      .then((res: string) => {
-        console.log(res);
+      .then((status: DayStatus) => {
+        if (status === DayStatus.Open) {
+          return;
+        }
+        this.challengeService.updateDayStatus(day.dayInMonth, status);
       });
+  }
+
+  ngOnDestroy(): void {
+    if (this.curChallengeSub) {
+      this.curChallengeSub.unsubscribe();
+    }
+  }
+
+  getIsSettable(dayInMonth: number) {
+    return dayInMonth <= new Date().getDate();
   }
 }

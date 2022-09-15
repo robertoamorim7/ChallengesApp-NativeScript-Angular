@@ -3,12 +3,40 @@
     text="Completed"
     class="btn btn-success"
     (tap)="onAction('completed')"
+    *ngIf="action !== 'completed'"
+    [isEnabled]="!done"
   ></Button>
+  <Button
+    text="&#xf00c;"
+    class="fa btn btn-success btn-alt animate-btn"
+    *ngIf="action === 'completed'"
+  ></Button>
+
+  <!-- <StackLayout
+    height="60"
+    class="btn btn-success"
+    *ngIf="action === 'completed'"
+  >
+    <Label
+      text="&#xf00c;"
+      horizontalALignment="center"
+      class="fa btn-alt"
+    ></Label>
+  </StackLayout> -->
+
   <Button
     text="Failed"
     class="btn btn-fail"
     (tap)="onAction('failed')"
+    *ngIf="action !== 'failed'"
+    [isEnabled]="!done"
   ></Button>
+  <Button
+    text="&#xf00d;"
+    class="fa btn btn-fail btn-alt animate-btn"
+    *ngIf="action === 'failed'"
+  ></Button>
+
   <Button
     [text]="cancelText"
     class="btn btn-flat"

@@ -13,11 +13,33 @@ FlexboxLayout {
 .btn-success {
   background: $success;
   border-color: $success;
+  border-width: 1;
   color: white;
 }
 
 .btn-fail {
   background: $fail;
   border-color: $fail;
+  border-width: 1;
   color: white;
+}
+
+.btn-alt {
+  font-size: 30;
+}
+
+.animate-btn {
+  animation-name: slide-up;
+  animation-iteration-count: 1;
+  animation-duration: 0.8s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(30);
+  }
+  to {
+    transform: translateY(0);
+  }
 }
