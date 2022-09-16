@@ -21,6 +21,19 @@ export class ChallengeService {
     this._currentChallenge.next(challenge);
   }
 
+  updateChallenge(title: string, description: string) {
+    this._currentChallenge.pipe(take(1)).subscribe((challenge) => {
+      const updatedChallenge = new Challenge(
+        title,
+        description,
+        challenge.year,
+        challenge.month,
+        challenge.days
+      );
+      this._currentChallenge.next(updatedChallenge);
+    });
+  }
+
   updateDayStatus(dayInMonth: number, dayStatus: DayStatus) {
     this.currentChallenge.pipe(take(1)).subscribe((challenge) => {
       if (!challenge || challenge.days.length < dayInMonth) {
@@ -31,7 +44,7 @@ export class ChallengeService {
       );
       challenge.days[dayIndex].status = dayStatus;
       this._currentChallenge.next(challenge);
-      console.log(challenge.days[dayIndex]);
+      // console.log(challenge.days[dayIndex]);
     });
   }
 

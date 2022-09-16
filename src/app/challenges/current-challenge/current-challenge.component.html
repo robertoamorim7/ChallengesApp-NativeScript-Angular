@@ -3,7 +3,11 @@
   <ActionItem ios.position="left" android.position="actionBar"
     ><Label text="&#xf0fe;" class="fa" nsRouterLink="/challenges/add"></Label>
   </ActionItem>
-  <ActionItem ios.position="left" android.position="actionBar"
+  <ActionItem
+    ios.position="left"
+    android.position="actionBar"
+    *ngIf="currentChallenge"
+    pageTransition="slideLeft"
     ><Label text="&#xf044;" class="fa" nsRouterLink="/challenges/edit"></Label>
   </ActionItem>
 </ns-action-bar>
