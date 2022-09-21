@@ -1,4 +1,8 @@
-<TabView androidTabsPosition="bottom" selectedTabTextColor="#7c015d">
+<TabView
+  androidTabsPosition="bottom"
+  selectedTabTextColor="#7c015d"
+  *ngIf="!isLoading"
+>
   <page-router-outlet
     *tabItem="{ title: 'Today' }"
     name="today"
@@ -8,3 +12,7 @@
     name="current"
   ></page-router-outlet>
 </TabView>
+
+<FlexboxLayout justifyContent="center" alignItems="center" *ngIf="isLoading">
+  <ActivityIndicator [busy]="isLoading"></ActivityIndicator>
+</FlexboxLayout>

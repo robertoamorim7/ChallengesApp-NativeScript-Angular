@@ -1,13 +1,43 @@
 import { Injectable } from "@angular/core";
-import { BehaviorSubject, take } from "rxjs";
-import { Challenge, DayStatus } from "./challenge.model";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, take, tap } from "rxjs";
+import { Challenge, Day, DayStatus } from "./challenge.model";
 
 @Injectable({ providedIn: "root" })
 export class ChallengeService {
   private _currentChallenge = new BehaviorSubject<Challenge>(null);
 
+  constructor(private http: HttpClient) {}
+
   get currentChallenge() {
     return this._currentChallenge.asObservable();
+  }
+
+  fetchCurrentChallenge() {
+    return this.http
+      .get<{
+        title: string;
+        description: string;
+        month: number;
+        year: number;
+        _days: Day[];
+      }>(
+        "https://nativescript-angular-app-default-rtdb.firebaseio.com/challenge.json"
+      )
+      .pipe(
+        tap((res) => {
+          if (res) {
+            const loadedChallenge = new Challenge(
+              res.title,
+              res.description,
+              res.year,
+              res.month,
+              res._days
+            );
+            this._currentChallenge.next(loadedChallenge);
+          }
+        })
+      );
   }
 
   createNewChallenge(title: string, description: string) {
@@ -17,7 +47,8 @@ export class ChallengeService {
       new Date().getFullYear(),
       new Date().getMonth()
     );
-
+    //save to backend with firebase
+    this.saveToServer(challenge);
     this._currentChallenge.next(challenge);
   }
 
@@ -30,6 +61,8 @@ export class ChallengeService {
         challenge.month,
         challenge.days
       );
+      //send to backend
+      this.saveToServer(updatedChallenge);
       this._currentChallenge.next(updatedChallenge);
     });
   }
@@ -44,9 +77,16 @@ export class ChallengeService {
       );
       challenge.days[dayIndex].status = dayStatus;
       this._currentChallenge.next(challenge);
-      // console.log(challenge.days[dayIndex]);
+      this.saveToServer(challenge);
     });
   }
 
-  constructor() {}
+  private saveToServer(challenge: Challenge) {
+    this.http
+      .put(
+        "https://nativescript-angular-app-default-rtdb.firebaseio.com/challenge.json",
+        challenge
+      )
+      .subscribe();
+  }
 }
